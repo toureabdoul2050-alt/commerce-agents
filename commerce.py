@@ -1,4 +1,4 @@
-"""Commerce Agents — Scout (product scoring), Copywriter (AI listings), Accountant (sales).
+"""Commerce Agents: Scout (product scoring), Copywriter (AI listings), Accountant (sales).
 
 Usage:
     python commerce.py scout ideas.csv
@@ -17,7 +17,7 @@ def read_csv(path: str) -> list:
         return list(csv.DictReader(f))
 
 
-# 🔎 Scout ---------------------------------------------------------------
+# Scout ---------------------------------------------------------------
 def score(row: dict) -> float:
     price, cost = float(row["price"]), float(row["cost"])
     margin_pct = (price - cost) / price * 100 if price else 0
@@ -31,7 +31,7 @@ def scout(path: str) -> None:
         print(f"{i:<5}{row['name'][:29]:<30}{score(row):>7}")
 
 
-# 📊 Accountant ----------------------------------------------------------
+# Accountant ----------------------------------------------------------
 def sales(path: str) -> None:
     rows = read_csv(path)
     revenue = profit = 0.0
@@ -48,14 +48,14 @@ def sales(path: str) -> None:
     print(f"Best seller:  {best[0]}  ({best[1]:,.2f} profit)")
 
 
-# ✍️ Copywriter ----------------------------------------------------------
+# Copywriter ----------------------------------------------------------
 def listing(name: str, features: str) -> None:
     import anthropic
 
     prompt = (
         f"Write a marketplace listing for: {name}.\nKey features: {features}.\n"
         "Return: a title under 80 characters, 5 benefit-focused bullet points, "
-        "and a 3-sentence description. Be honest — no claims that are not in the features."
+        "and a 3-sentence description. Be honest: no claims that are not in the features."
     )
     response = anthropic.Anthropic().messages.create(
         model=MODEL, max_tokens=700, messages=[{"role": "user", "content": prompt}]
